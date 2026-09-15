@@ -4,9 +4,149 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NAGN"
+        xmlns:uc="clr-namespace:NAGN.UsersControllers"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="700"
+        Width="1200">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0"
+                Background="DimGray">
+            <StackPanel VerticalAlignment="Center">
+                <Menu Background="Transparent"
+                      VerticalAlignment="Center">
+                    <MenuItem Header="File"
+                              Foreground="White">
+                        <MenuItem Header="New"
+                                  Foreground="White"
+                                  Background="DimGray" />
+                        <MenuItem Header="Open"
+                                  Foreground="White"
+                                  Background="DimGray" />
+                        <MenuItem Header="Save"
+                                  Foreground="White"
+                                  Background="DimGray" />
+                    </MenuItem>
+                    <MenuItem Header="Camera"
+                              Foreground="White" />
+                </Menu>
+            </StackPanel>
+        </Border>
+        <Grid Grid.Row="1"
+              Background="Gray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0"
+                    BorderBrush="White"
+                    BorderThickness="0,0,3,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35" />
+                        <RowDefinition />
+                        <RowDefinition Height="35" />
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0"
+                            VerticalAlignment="Center">
+                        <DockPanel Margin="5">
+                            <TextBlock Text="Program"
+                                       DockPanel.Dock="Left"
+                                       Foreground="White"
+                                       FontSize="18" />
+                            <Button HorizontalAlignment="Right"
+                                    Content="◀" />
+                        </DockPanel>
+                    </Border>
+                    <Border Grid.Row="1"
+                            BorderBrush="White"
+                            BorderThickness="1"
+                            Margin="5">
+                        <uc:Program x:Name="treeViewProgram"/>
+                    </Border>
+                    <Border Grid.Row="2">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Stretch">
+                            <Button Content="+"
+                                    Height="28"
+                                    Width="28" />
+                            <Button Content="🗑"
+                                    Height="28"
+                                    Width="28" />
+                            <Button Content="►"
+                                    Height="28"
+                                    Width="28" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Column="1"
+                    BorderBrush="White"
+                    BorderThickness="0,0,3,0">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <DockPanel>
+                        <DockPanel Margin="5">
+                            <TextBlock Text="Properties"
+                                       DockPanel.Dock="Left"
+                                       Foreground="White"
+                                       FontSize="18" />
+                            <Button HorizontalAlignment="Right"
+                                    Content="◀" />
+                        </DockPanel>
+                    </DockPanel>
+                    <Border Grid.Row="1"
+                            BorderBrush="White"
+                            BorderThickness="1">
 
+                    </Border>
+                    <Border Grid.Row="3"
+                            BorderBrush="White"
+                            BorderThickness="1">
+
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Column="2"
+                    BorderBrush="White"
+                    BorderThickness="0,0,3,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <DockPanel>
+                        <DockPanel Margin="5">
+                            <TextBlock Text="Setting Algorithms"
+                                       DockPanel.Dock="Left"
+                                       Foreground="White"
+                                       FontSize="18" />
+                            <Button HorizontalAlignment="Right"
+                                    Content="◀" />
+                        </DockPanel>
+                    </DockPanel>
+                    <Border Grid.Row="1"
+                            BorderBrush="White"
+                            BorderThickness="1"
+                            Margin="5">
+
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Column="3">
+            </Border>
+        </Grid>
     </Grid>
 </Window>

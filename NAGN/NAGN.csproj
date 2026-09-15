@@ -7,4 +7,23 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\ImagePolygon.webp" />
+    <None Remove="Assets\ImageRectangle.jpg" />
+    <None Remove="Assets\istockphoto-1369198572-170667a.jpg" />
+    <None Remove="Assets\istockphoto-1693405252-612x612.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\ImagePolygon.webp" />
+    <Resource Include="Assets\ImageRectangle.jpg" />
+    <Resource Include="Assets\istockphoto-1369198572-170667a.jpg" />
+    <Resource Include="Assets\istockphoto-1693405252-612x612.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+	
+  </ItemGroup>
+
 </Project>

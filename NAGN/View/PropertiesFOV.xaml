@@ -7,38 +7,56 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="Gray">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Border BorderBrush="White"
-                        BorderThickness="0,0,0,1"
-                        Grid.Row="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Expander Header="Properties" Grid.Row="0" IsExpanded="True">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="White"
+                            BorderThickness="0,0,0,1"
+                            Grid.Row="0">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Name" />
+                            <TextBox />
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="White"
+                            BorderThickness="0,0,0,1"
+                            Grid.Row="1">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Camera" />
+                            <TextBox />
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="White"
+                            BorderThickness="0,0,0,1"
+                            Grid.Row="2">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Capture Setting" />
+                            <TextBox />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </ScrollViewer>
+        </Expander>
+        <Expander Header="Image Output"
+                  Grid.Row="1"
+                  IsExpanded="True">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid Margin="10">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Name" />
-                        <TextBox/>
+                        <Button Content="+"
+                                FontSize="20" FontWeight="UltraBold"/>
                     </StackPanel>
-                </Border>
-                <Border BorderBrush="White"
-                        BorderThickness="0,0,0,1"
-                        Grid.Row="1">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Camera" />
-                        <TextBox />
-                    </StackPanel>
-                </Border>
-                <Border BorderBrush="White"
-                        BorderThickness="0,0,0,1"
-                        Grid.Row="2">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="Capture Setting" />
-                        <TextBox />
-                    </StackPanel>
-                </Border>
-            </Grid>
-        </ScrollViewer>
+                </Grid>
+            </ScrollViewer>
+        </Expander>
     </Grid>
 </UserControl>

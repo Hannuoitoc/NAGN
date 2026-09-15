@@ -101,8 +101,6 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <DockPanel>
                         <DockPanel Margin="5">
@@ -117,12 +115,8 @@
                     <Border Grid.Row="1"
                             BorderBrush="White"
                             BorderThickness="1">
-                        <view:PropertiesFOV/>
-                    </Border>
-                    <Border Grid.Row="3"
-                            BorderBrush="White"
-                            BorderThickness="1">
-
+                        <!--<view:PropertiesFOV x:Name="PropertiesFOV" Visibility="Collapsed"/>-->
+                        <view:PropertiesAlgorithm x:Name="PropertiesAlgorithm" Visibility="Visible"/>
                     </Border>
                 </Grid>
             </Border>

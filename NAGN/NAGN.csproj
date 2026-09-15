@@ -15,15 +15,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="JsonConverter.Abstractions" Version="0.13.0" />
+    <PackageReference Include="JsonConverter.Newtonsoft.Json" Version="0.13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\ImagePolygon.webp" />
     <Resource Include="Assets\ImageRectangle.jpg" />
     <Resource Include="Assets\istockphoto-1369198572-170667a.jpg" />
     <Resource Include="Assets\istockphoto-1693405252-612x612.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
-	
   </ItemGroup>
 
 </Project>

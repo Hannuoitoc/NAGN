@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NAGN"
         xmlns:uc="clr-namespace:NAGN.UsersControllers"
+        xmlns:view="clr-namespace:NAGN.View"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700"
@@ -23,13 +24,16 @@
                               Foreground="White">
                         <MenuItem Header="New"
                                   Foreground="White"
-                                  Background="DimGray" />
+                                  Background="DimGray"
+                                  Click="Button_Click_New_Program" />
                         <MenuItem Header="Open"
                                   Foreground="White"
-                                  Background="DimGray" />
+                                  Background="DimGray"
+                                  Click="Button_Click_Open_Program" />
                         <MenuItem Header="Save"
                                   Foreground="White"
-                                  Background="DimGray" />
+                                  Background="DimGray"
+                                  Click="Button_Click_Save_Program" />
                     </MenuItem>
                     <MenuItem Header="Camera"
                               Foreground="White" />
@@ -69,6 +73,7 @@
                             BorderThickness="1"
                             Margin="5">
                         <uc:Program x:Name="treeViewProgram"/>
+                        
                     </Border>
                     <Border Grid.Row="2">
                         <StackPanel Orientation="Horizontal"
@@ -76,10 +81,12 @@
                                     VerticalAlignment="Stretch">
                             <Button Content="+"
                                     Height="28"
-                                    Width="28" />
+                                    Width="28"
+                                    Click="Button_Click_Add_Node" />
                             <Button Content="🗑"
                                     Height="28"
-                                    Width="28" />
+                                    Width="28"
+                                    Click="Button_Click_Remove_Node" />
                             <Button Content="►"
                                     Height="28"
                                     Width="28" />
@@ -110,7 +117,7 @@
                     <Border Grid.Row="1"
                             BorderBrush="White"
                             BorderThickness="1">
-
+                        <view:PropertiesFOV/>
                     </Border>
                     <Border Grid.Row="3"
                             BorderBrush="White"

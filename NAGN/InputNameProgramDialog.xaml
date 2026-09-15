@@ -1,0 +1,34 @@
+﻿<Window x:Class="NAGN.InputNameProgramDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NAGN"
+        mc:Ignorable="d"
+        Title="InputNameProgramDialog" Height="200" Width="400">
+    <Grid Margin="10">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="Nhập tên model:"
+                       FontSize="20" />
+            <TextBox Name="txtInputNameModel"
+                     FontSize="20"
+                     BorderBrush="Black"
+                     Margin="0,10" />
+            <StackPanel HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                <Button x:Name="butTao"
+                        Content="Tạo"
+                        Margin="10,0"
+                        Padding="10,5"
+                        FontSize="20"
+                        Click="butTao_Click" />
+                <Button x:Name="butXoa"
+                        Content="Hủy"
+                        Margin="10,0"
+                        Padding="10,5"
+                        FontSize="20"
+                        Click="butHuy_Click" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

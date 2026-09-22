@@ -8,10 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\ImagePolygon.webp" />
+    <None Remove="Assets\ImageIcon.png" />
     <None Remove="Assets\ImageRectangle.jpg" />
     <None Remove="Assets\istockphoto-1369198572-170667a.jpg" />
     <None Remove="Assets\istockphoto-1693405252-612x612.jpg" />
+    <None Remove="Assets\polygon.png" />
+    <None Remove="ImageTrain\dem-day-sao-vicent-van-gogh.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,10 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\ImagePolygon.webp" />
+    <Resource Include="Assets\ImageIcon.png" />
     <Resource Include="Assets\ImageRectangle.jpg" />
     <Resource Include="Assets\istockphoto-1369198572-170667a.jpg" />
     <Resource Include="Assets\istockphoto-1693405252-612x612.jpg" />
+    <Resource Include="Assets\polygon.png" />
+    <Resource Include="ImageTrain\dem-day-sao-vicent-van-gogh.jpg" />
   </ItemGroup>
 
 </Project>

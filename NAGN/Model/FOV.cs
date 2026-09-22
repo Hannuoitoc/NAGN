@@ -16,7 +16,7 @@ namespace NAGN.Model
         private string _name;
         public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
         public int IdProgram { get; set; }
-        public string ImageBit { get; set; }
+        public string ImageFilePath { get; set; }
         public ObservableCollection<Algorithms> Algorithmslist { get; set; } = new ObservableCollection<Algorithms>();
 
         public event PropertyChangedEventHandler PropertyChanged;

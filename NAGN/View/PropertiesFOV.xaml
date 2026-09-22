@@ -6,14 +6,19 @@
              xmlns:local="clr-namespace:NAGN.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="Gray">
+    <Grid Background="Gray" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Expander Header="Properties" Grid.Row="0" IsExpanded="True">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <Grid Margin="10">
+        <Expander Header="Properties"
+                  Grid.Row="0"
+                  IsExpanded="True"
+                  >
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          >
+                <Grid Margin="10"
+                       >
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
@@ -24,7 +29,7 @@
                             Grid.Row="0">
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Name" />
-                            <TextBox />
+                            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </Border>
                     <Border BorderBrush="White"
@@ -48,15 +53,22 @@
         </Expander>
         <Expander Header="Image Output"
                   Grid.Row="1"
-                  IsExpanded="True">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <Grid Margin="10">
-                    <StackPanel Orientation="Vertical">
-                        <Button Content="+"
-                                FontSize="20" FontWeight="UltraBold"/>
-                    </StackPanel>
-                </Grid>
-            </ScrollViewer>
+                  IsExpanded="True"
+                  >
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Vertical" Grid.Row="0">
+                    <Button Content="+"
+                            FontSize="20"
+                            FontWeight="UltraBold" />
+                </StackPanel>
+                <StackPanel Grid.Row="1">
+                    <!--Thêm list output image-->
+                </StackPanel>
+            </Grid>
         </Expander>
     </Grid>
 </UserControl>

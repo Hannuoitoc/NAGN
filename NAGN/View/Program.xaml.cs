@@ -19,6 +19,7 @@ namespace NAGN.UsersControllers
     public partial class Program : UserControl
     {
         public event EventHandler<Model.FOV> OnFOVSelected;
+        public event EventHandler<Model.Algorithms> OnAlgorithmSelected;
         public Program()
         {
             InitializeComponent();
@@ -27,7 +28,6 @@ namespace NAGN.UsersControllers
         {
             if (program == null) return;
 
-            // Chỉ cần gán Nguồn dữ liệu, WPF sẽ tự tạo toàn bộ Cây giao diện!
             TreeViewProgram.ItemsSource = new ObservableCollection<Model.Program> { program };
         }
 
@@ -68,7 +68,13 @@ namespace NAGN.UsersControllers
         {
             if(TreeViewProgram.SelectedItem is Model.FOV selectedFOV)
             {
+                OnAlgorithmSelected?.Invoke(this, null);
                 OnFOVSelected?.Invoke(this, selectedFOV);
+            }
+            if(TreeViewProgram.SelectedItem is Model.Algorithms selectedAlgorithms)
+            {
+                OnFOVSelected?.Invoke(this, null);
+                OnAlgorithmSelected?.Invoke(this, selectedAlgorithms);
             }
         }
     }

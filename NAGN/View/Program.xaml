@@ -7,13 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <!-- Template cho Cấp 3: Algorithm (không có cấp con) -->
         <DataTemplate DataType="{x:Type model:Algorithms}">
             <TextBlock Text="{Binding Name}"
                        Foreground="Black" />
         </DataTemplate>
-
-        <!-- Template cho Cấp 2: FOV (chứa danh sách Algorithmslist) -->
+        
         <HierarchicalDataTemplate DataType="{x:Type model:FOV}"
                                   ItemsSource="{Binding Algorithmslist}">
             <TextBlock Text="{Binding Name}"
@@ -21,7 +19,6 @@
                        Foreground="Black"/>
         </HierarchicalDataTemplate>
 
-        <!-- Template cho Cấp 1: Program (chứa danh sách FOVlist) -->
         <HierarchicalDataTemplate DataType="{x:Type model:Program}"
                                   ItemsSource="{Binding FOVlist}">
             <TextBlock Text="{Binding Name}"
@@ -32,9 +29,9 @@
     </UserControl.Resources>
 
     <Grid>
-        <!-- TreeView tự động nhận DataTemplate ở trên -->
+        
         <TreeView x:Name="TreeViewProgram"
-                  ItemsSource="{Binding ProgramItems}" Background="Gray"
+                   Background="Gray"
                   SelectedItemChanged="TreeViewProgram_SelectedItemChanged" />
     </Grid>
 </UserControl>

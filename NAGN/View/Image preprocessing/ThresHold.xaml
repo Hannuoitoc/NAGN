@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="NAGN.View.Image_preprocessing.ThresHold"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NAGN.View.Image_preprocessing"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Text="ThresHold" />
+            <TextBlock Text="Min" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="ThresHoldMinSlider"
+                            Minimum="0"
+                            Maximum="255"
+                            Value="128"
+                            VerticalAlignment="Center" Grid.Column="0"/>
+                <TextBox Text="{Binding Value, ElementName=ThresHoldMinSlider, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:F0}'}"
+                         Width="Auto"
+                         HorizontalAlignment="Right"
+                         Grid.Column="1" />
+            </Grid>
+            <TextBlock Text="Max" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="ThresHoldMaxSlider"
+                        Minimum="0"
+                        Maximum="255"
+                        Value="128"
+                        VerticalAlignment="Center"
+                        Grid.Column="0" />
+                <TextBox Text="{Binding Value, ElementName=ThresHoldMaxSlider, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:F0}'}"
+                         Width="Auto"
+                         HorizontalAlignment="Right"
+                         Grid.Column="1" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

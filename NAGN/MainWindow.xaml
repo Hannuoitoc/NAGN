@@ -6,10 +6,21 @@
         xmlns:local="clr-namespace:NAGN"
         xmlns:uc="clr-namespace:NAGN.UsersControllers"
         xmlns:view="clr-namespace:NAGN.View"
+        xmlns:model="clr-namespace:NAGN.Model"
+        xmlns:viewImagePreprocessing="clr-namespace:NAGN.View.Image_preprocessing"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700"
-        Width="1200">
+        Width="1200"
+        Closing="Window_Closing">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type model:FOV}">
+            <view:PropertiesFOV />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type model:Algorithms}">
+            <view:PropertiesAlgorithm />
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -20,22 +31,22 @@
             <StackPanel VerticalAlignment="Center">
                 <Menu Background="Transparent"
                       VerticalAlignment="Center">
-                    <MenuItem Header="File"
+                    <MenuItem Header="_File"
                               Foreground="White">
-                        <MenuItem Header="New"
+                        <MenuItem Header="_New"
                                   Foreground="White"
                                   Background="DimGray"
                                   Click="Button_Click_New_Program" />
-                        <MenuItem Header="Open"
+                        <MenuItem Header="_Open"
                                   Foreground="White"
                                   Background="DimGray"
                                   Click="Button_Click_Open_Program" />
-                        <MenuItem Header="Save"
+                        <MenuItem Header="_Save"
                                   Foreground="White"
                                   Background="DimGray"
                                   Click="Button_Click_Save_Program" />
                     </MenuItem>
-                    <MenuItem Header="Camera"
+                    <MenuItem Header="_Camera"
                               Foreground="White" />
                 </Menu>
             </StackPanel>
@@ -43,15 +54,20 @@
         <Grid Grid.Row="1"
               Background="Gray">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
-                <ColumnDefinition Width="200" />
-                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200"
+                                  x:Name="Grid_Program" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="200"
+                                  x:Name="Grid_Properties" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="200"
+                                  x:Name="Grid_Setting_Algorithms" />
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Border Grid.Column="0"
-                    BorderBrush="White"
-                    BorderThickness="0,0,3,0">
-                <Grid>
+                    >
+                <Grid SizeChanged="Grid_Size_Changed_Program">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
                         <RowDefinition />
@@ -63,22 +79,30 @@
                             <TextBlock Text="Program"
                                        DockPanel.Dock="Left"
                                        Foreground="White"
-                                       FontSize="18" />
+                                       FontSize="18" 
+                                       x:Name="tbProgram"
+                                       />
                             <Button HorizontalAlignment="Right"
-                                    Content="◀" />
+                                    Content="◀"
+                                    Click="Click_Close_Open" 
+                                    x:Name="btn_Close_Open_Program"
+                                    />
+
                         </DockPanel>
                     </Border>
                     <Border Grid.Row="1"
                             BorderBrush="White"
                             BorderThickness="1"
                             Margin="5">
-                        <uc:Program x:Name="treeViewProgram"/>
+                        <uc:Program x:Name="treeViewProgram"
+                                    OnFOVSelected="treeViewProgram_OnSelected_FOV"
+                                    OnAlgorithmSelected="treeViewProgram_OnSelected_Algorithm" />
                         
                     </Border>
                     <Border Grid.Row="2">
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch">
+                                    VerticalAlignment="Stretch" x:Name="toolBar">
                             <Button Content="+"
                                     Height="28"
                                     Width="28"
@@ -94,10 +118,15 @@
                     </Border>
                 </Grid>
             </Border>
-            <Border Grid.Column="1"
-                    BorderBrush="White"
-                    BorderThickness="0,0,3,0">
-                <Grid Margin="5">
+            <GridSplitter Grid.Column="1"
+                          Width="2"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Cursor="SizeWE"
+                          Background="White" />
+            <Border Grid.Column="2">
+                <Grid
+                      SizeChanged="Grid_Size_Changed_Properties">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
                         <RowDefinition Height="Auto" />
@@ -107,23 +136,33 @@
                             <TextBlock Text="Properties"
                                        DockPanel.Dock="Left"
                                        Foreground="White"
-                                       FontSize="18" />
+                                       FontSize="18"
+                                       x:Name="tbProperties" />
                             <Button HorizontalAlignment="Right"
-                                    Content="◀" />
+                                    Content="◀"
+                                    Click="Click_Close_Open" 
+                                    x:Name="btn_Close_Open_Properties"
+                                    />
                         </DockPanel>
                     </DockPanel>
                     <Border Grid.Row="1"
                             BorderBrush="White"
                             BorderThickness="1">
-                        <!--<view:PropertiesFOV x:Name="PropertiesFOV" Visibility="Collapsed"/>-->
-                        <view:PropertiesAlgorithm x:Name="PropertiesAlgorithm" Visibility="Visible"/>
+                        <StackPanel x:Name="stackPanel_PropertiesFOV_PropertiesAlgorithm">
+                            
+                            <ContentControl x:Name="ContentControlProperties"/>
+                        </StackPanel>
                     </Border>
                 </Grid>
             </Border>
-            <Border Grid.Column="2"
-                    BorderBrush="White"
-                    BorderThickness="0,0,3,0">
-                <Grid>
+            <GridSplitter Grid.Column="3"
+                          Width="2"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Cursor="SizeWE"
+                          Background="White" />
+            <Border Grid.Column="4">
+                <Grid SizeChanged="Grid_Size_Changed_Setting_Algorithms">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
                         <RowDefinition />
@@ -133,20 +172,38 @@
                             <TextBlock Text="Setting Algorithms"
                                        DockPanel.Dock="Left"
                                        Foreground="White"
-                                       FontSize="18" />
+                                       FontSize="18"
+                                       x:Name="tbSetting_Algorithms" 
+                                       />
                             <Button HorizontalAlignment="Right"
-                                    Content="◀" />
+                                    Content="◀"
+                                    Click="Click_Close_Open" 
+                                    x:Name="btn_Close_Open_Setting_Algorithms"
+                                    />
                         </DockPanel>
                     </DockPanel>
                     <Border Grid.Row="1"
                             BorderBrush="White"
                             BorderThickness="1"
                             Margin="5">
-
+                        <viewImagePreprocessing:ThresHold />
                     </Border>
                 </Grid>
             </Border>
-            <Border Grid.Column="3">
+            <GridSplitter Grid.Column="5"
+                          Width="2"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Cursor="SizeWE"
+                          Background="White" />
+            <Border Grid.Column="6">
+                <Grid>
+                    <Border Grid.Row="0"
+                            BorderBrush="White"
+                            BorderThickness="0,1,1,1">
+                        <view:CameraView x:Name="CameraView"/>
+                    </Border>
+                </Grid>
             </Border>
         </Grid>
     </Grid>

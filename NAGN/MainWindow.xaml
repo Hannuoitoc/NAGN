@@ -149,7 +149,6 @@
                             BorderBrush="White"
                             BorderThickness="1">
                         <StackPanel x:Name="stackPanel_PropertiesFOV_PropertiesAlgorithm">
-                            
                             <ContentControl x:Name="ContentControlProperties"/>
                         </StackPanel>
                     </Border>

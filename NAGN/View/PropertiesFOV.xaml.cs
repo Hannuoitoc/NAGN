@@ -24,5 +24,13 @@ namespace NAGN.View
         {
             InitializeComponent();
         }
+
+        private void Button_Click_Add_Output_Image(object sender, RoutedEventArgs e)
+        {
+            if(this.DataContext is Model.FOV fov)
+            {
+                fov.newOutputImage();
+            }
+        }
     }
 }

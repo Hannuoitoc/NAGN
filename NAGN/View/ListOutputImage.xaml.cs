@@ -16,15 +16,13 @@ using System.Windows.Shapes;
 namespace NAGN.View
 {
     /// <summary>
-    /// Interaction logic for OutputImage.xaml
+    /// Interaction logic for ListOutputImage.xaml
     /// </summary>
-    public partial class OutputImage : UserControl
+    public partial class ListOutputImage : UserControl
     {
-        public OutputImage()
+        public ListOutputImage()
         {
             InitializeComponent();
         }
-
-        
     }
 }

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace NAGN.Model
 {
@@ -18,8 +19,14 @@ namespace NAGN.Model
         public int IdProgram { get; set; }
         public string ImageFilePath { get; set; }
         public ObservableCollection<Algorithms> Algorithmslist { get; set; } = new ObservableCollection<Algorithms>();
-
+        public ObservableCollection<OutputImage> OutputImageslist { get; set; } = new ObservableCollection<OutputImage>(); 
         public event PropertyChangedEventHandler PropertyChanged;
+        public ICommand RemoveOutputImageCommand { get; }
+        public FOV()
+        {
+            // 2. Nối Command với hàm RemoveOutputImage
+            RemoveOutputImageCommand = new RelayCommand<OutputImage>(RemoveOutputImage);
+        }
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -38,6 +45,22 @@ namespace NAGN.Model
         public void removeFOV(Model.Program program, Model.FOV fov)
         {
             program.FOVlist.Remove(fov);
+        }
+        public void newOutputImage()
+        {
+            var outputImage = new OutputImage()
+            {
+                Name = "Output Image " + (OutputImageslist.Count + 1),
+                IdFOV = Id
+            };
+            OutputImageslist.Add(outputImage);
+        }
+        public void RemoveOutputImage(OutputImage outputImage)
+        {
+            if (outputImage != null && OutputImageslist.Contains(outputImage))
+            {
+                OutputImageslist.Remove(outputImage);
+            }
         }
     }
 }

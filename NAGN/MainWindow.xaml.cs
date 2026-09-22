@@ -71,28 +71,31 @@ namespace NAGN
 
         private void Button_Click_Save_Program(object sender, RoutedEventArgs e)
         {
-            if(program_old == null)
+            if(program_new != null)
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog()
+                if (program_old == null)
                 {
-                    InitialDirectory = @"C:\Downloads",
-                    FileName = $"{program_new.Name.Trim()}.json",
-                    Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
-                    Title = "Lưu model"
-                };
-                if (saveFileDialog.ShowDialog() == true)
-                {
-                    program_new.FilePath = saveFileDialog.FileName;
-                    Services.JsonService.SaveToJson(program_new, program_new.FilePath); 
+                    SaveFileDialog saveFileDialog = new SaveFileDialog()
+                    {
+                        InitialDirectory = @"C:\Downloads",
+                        FileName = $"{program_new.Name.Trim()}.json",
+                        Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                        Title = "Lưu model"
+                    };
+                    if (saveFileDialog.ShowDialog() == true)
+                    {
+                        program_new.FilePath = saveFileDialog.FileName;
+                        Services.JsonService.SaveToJson(program_new, program_new.FilePath);
+                    }
                 }
+                else
+                {
+                    Services.JsonService.SaveToJson(program_new, program_new.FilePath); ;
+                }
+                program_new = Services.JsonService.LoadFromJson(program_new.FilePath);
+                string jsonCopy = System.Text.Json.JsonSerializer.Serialize(program_new);
+                program_old = System.Text.Json.JsonSerializer.Deserialize<Model.Program>(jsonCopy);
             }
-            else
-            {
-                Services.JsonService.SaveToJson(program_new, program_new.FilePath);;
-            }
-            program_new = Services.JsonService.LoadFromJson(program_new.FilePath);
-            string jsonCopy = System.Text.Json.JsonSerializer.Serialize(program_new);
-            program_old = System.Text.Json.JsonSerializer.Deserialize<Model.Program>(jsonCopy);
         }
 
         private void treeViewProgram_OnSelected_FOV(object sender, Model.FOV selectedFOV)

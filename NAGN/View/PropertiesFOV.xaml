@@ -9,7 +9,7 @@
     <Grid Background="Gray" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Expander Header="Properties"
                   Grid.Row="0"
@@ -57,8 +57,8 @@
                   >
             <Grid Margin="10">
                 <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Vertical" Grid.Row="0">
                     <Button Content="+"
@@ -66,10 +66,10 @@
                             FontWeight="UltraBold"
                             Click="Button_Click_Add_Output_Image" />
                 </StackPanel>
-                <StackPanel Grid.Row="1">
+                <Grid Grid.Row="1">
                     <local:ListOutputImage x:Name="ListOutputImage"
                                            DataContext="{Binding OutputImageslist}"/>
-                </StackPanel>
+                </Grid>
             </Grid>
         </Expander>
     </Grid>

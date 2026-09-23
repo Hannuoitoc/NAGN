@@ -12,7 +12,8 @@
         Title="MainWindow"
         Height="700"
         Width="1200"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        >
     <Window.Resources>
         <DataTemplate DataType="{x:Type model:FOV}">
             <view:PropertiesFOV />
@@ -129,7 +130,7 @@
                       SizeChanged="Grid_Size_Changed_Properties">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <DockPanel>
                         <DockPanel Margin="5">
@@ -148,9 +149,9 @@
                     <Border Grid.Row="1"
                             BorderBrush="White"
                             BorderThickness="1">
-                        <StackPanel x:Name="stackPanel_PropertiesFOV_PropertiesAlgorithm">
+                        <Grid x:Name="stackPanel_PropertiesFOV_PropertiesAlgorithm">
                             <ContentControl x:Name="ContentControlProperties"/>
-                        </StackPanel>
+                        </Grid>
                     </Border>
                 </Grid>
             </Border>
@@ -185,7 +186,7 @@
                             BorderBrush="White"
                             BorderThickness="1"
                             Margin="5">
-                        <viewImagePreprocessing:ThresHold />
+                        <viewImagePreprocessing:ThresholdView />
                     </Border>
                 </Grid>
             </Border>

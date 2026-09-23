@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace NAGN.View.Image_preprocessing
 {
     /// <summary>
-    /// Interaction logic for ThresHold.xaml
+    /// Interaction logic for ThresholdView.xaml
     /// </summary>
-    public partial class ThresHold : UserControl
+    public partial class ThresholdView : UserControl
     {
-        public ThresHold()
+        public ThresholdView()
         {
             InitializeComponent();
         }

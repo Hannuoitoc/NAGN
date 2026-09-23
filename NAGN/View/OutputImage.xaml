@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NAGN.View"
+             xmlns:Image_Preprocessing="clr-namespace:NAGN.View.Image_preprocessing"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -16,17 +17,16 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Button Content="▶" Width="35"/>
                         <Button Content="+"
-                                Width="35" />
+                                Width="35" Command="{Binding AddImagePreprocessingCommand}"/>
                         <Button Content="🗑"
                                 Width="35"
                                 Command="{Binding DataContext.RemoveOutputImageCommand, 
                   RelativeSource={RelativeSource AncestorType={x:Type local:PropertiesFOV}}}"
                                 CommandParameter="{Binding}" />
                     </StackPanel>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        
-                    </ScrollViewer>
+                    <Image_Preprocessing:ListImagePreprocessing DataContext="{Binding ImagePreprocessingList}"/>
                 </StackPanel>
+                
             </Grid>
         </Border>
     </Grid>

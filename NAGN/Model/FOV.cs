@@ -60,7 +60,9 @@ namespace NAGN.Model
             if (outputImage != null && OutputImageslist.Contains(outputImage))
             {
                 OutputImageslist.Remove(outputImage);
+                
             }
         }
+       
     }
 }

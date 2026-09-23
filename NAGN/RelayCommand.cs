@@ -3,7 +3,6 @@ using System.Windows.Input;
 
 namespace NAGN
 {
-    // 1. Class RelayCommand không tham số (Cũ của bạn)
     public class RelayCommand : ICommand
     {
         private readonly Action _execute;
@@ -26,7 +25,6 @@ namespace NAGN
         }
     }
 
-    // 2. BỔ SUNG THÊM CLASS NÀY: RelayCommand có tham số generic <T>
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;
@@ -47,13 +45,15 @@ namespace NAGN
 
         public void Execute(object parameter)
         {
+            
             _execute((T)parameter);
         }
 
-        public event EventHandler CanExecuteChanged;
-        //{
-        //    add => CommandManager.RequerySuggested += value;
-        //    remove => CommandManager.RequerySuggested -= value;
-        //}
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
     }
+    
 }

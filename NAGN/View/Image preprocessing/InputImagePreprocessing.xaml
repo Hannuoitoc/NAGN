@@ -1,0 +1,32 @@
+﻿<Window x:Class="NAGN.View.Image_preprocessing.InputImagePreprocessing"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NAGN.View.Image_preprocessing"
+        mc:Ignorable="d"
+        Title="Input Image Preprocessing" Height="450" Width="800">
+    <Grid Background="Gray">
+        <StackPanel Width="800" HorizontalAlignment="Center"  Margin="10">
+            <Button x:Name="Threshold"
+                    BorderThickness="0" Background="Gray"
+                    Click="Button_Click_Chosse_Image_Preprocessing">
+                <TextBlock Text="Threshold" />
+            </Button>
+            <Button x:Name="Blur"
+                    BorderThickness="0"
+                    Background="Gray"
+                    Click="Button_Click_Chosse_Image_Preprocessing">
+                <TextBlock Text="Blur" />
+            </Button>
+            <Button BorderThickness="0"
+                    Background="Gray">
+                <TextBlock Text="a" />
+            </Button>
+            <Button BorderThickness="0"
+                    Background="Gray">
+                <TextBlock Text="b" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

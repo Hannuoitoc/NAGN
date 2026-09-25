@@ -27,7 +27,9 @@ namespace NAGN.NAGN_CV
                     Cv2.CvtColor(imageMat, grayImage, colorConversionCodes);
                 }
                 Cv2.InRange(grayImage, new Scalar(min), new Scalar(max), thresholdImage);
-                return thresholdImage.ToBitmapSource();
+                BitmapSource bs = thresholdImage.ToBitmapSource();
+                bs.Freeze();
+                return bs;
             }
         }
         public static BitmapSource Blur(BitmapImage image,int ksize)
@@ -36,7 +38,9 @@ namespace NAGN.NAGN_CV
             using (Mat blurImage = new Mat())
             {
                 Cv2.MedianBlur(imageMat, blurImage, ksize);
-                return blurImage.ToBitmapSource();
+                BitmapSource bs = blurImage.ToBitmapSource(); ;
+                bs.Freeze();
+                return bs;
             }
         }
         public static BitmapImage StringToBitmap(string image)

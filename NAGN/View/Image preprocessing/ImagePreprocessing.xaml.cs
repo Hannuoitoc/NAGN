@@ -27,7 +27,10 @@ namespace NAGN.View.Image_preprocessing
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is Model.ImagePreprocessParent imagePreprocessing)
+            {
                 OnImagePreprocessSetting?.Invoke(this, imagePreprocessing);
+                
+            }   
         }
     }
 }

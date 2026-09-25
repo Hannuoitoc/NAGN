@@ -24,7 +24,8 @@
                         Value="{Binding Ksize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         VerticalAlignment="Center"
                         Grid.Column="0"
-                        ValueChanged="ValueChanged" />
+                        ValueChanged="ValueChanged"
+                        PreviewMouseLeftButtonUp="KsizeMinSlider_PreviewMouseLeftButtonUp" />
                 <TextBox Text="{Binding Value, ElementName=KsizeMinSlider, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:F0}'}"
                      Width="Auto"
                      HorizontalAlignment="Right"

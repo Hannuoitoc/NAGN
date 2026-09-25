@@ -29,9 +29,15 @@ namespace NAGN.View.Image_preprocessing
         {
             if (DataContext is Model.Blur blur)
             {
-                blur.UpdateImage();
-                blur.SendImage();
+                blur.UpdateImageAndSend();
             }
+        }
+        private void KsizeMinSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            //if (DataContext is Model.Blur blur)
+            //{
+            //    blur.UpdateImageAndSend();
+            //}
             Event.IsPreprocessingChanged();
         }
     }

@@ -21,7 +21,8 @@
                         Value="{Binding Min,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         VerticalAlignment="Center"
                         Grid.Column="0"
-                        ValueChanged="ValueChanged" />
+                        ValueChanged="ValueChanged"
+                        PreviewMouseLeftButtonUp="ThresHoldSlider_PreviewMouseLeftButtonUp" />
                 <TextBox Text="{Binding Value, ElementName=ThresHoldMinSlider, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:F0}'}"
                          Width="Auto"
                          HorizontalAlignment="Right"
@@ -39,7 +40,8 @@
                         Value="{Binding Max,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         VerticalAlignment="Center"
                         Grid.Column="0"
-                        ValueChanged="ValueChanged" />
+                        ValueChanged="ValueChanged"
+                        PreviewMouseLeftButtonUp="ThresHoldSlider_PreviewMouseLeftButtonUp" />
                 <TextBox Text="{Binding Value, ElementName=ThresHoldMaxSlider, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:F0}'}"
                          Width="Auto"
                          HorizontalAlignment="Right"

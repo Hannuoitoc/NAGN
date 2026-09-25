@@ -25,9 +25,13 @@ namespace NAGN.View.Image_preprocessing
         {
             if (DataContext is Model.Threshold threshold)
             {
-                threshold.UpdateImage();
-                threshold.SendImage();
+                threshold.UpdateImageAndSend();
+                //threshold.SendImage();
             }
+        }
+
+        private void ThresHoldSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
             Event.IsPreprocessingChanged();
         }
     }

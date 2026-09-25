@@ -48,9 +48,10 @@ namespace NAGN.Model
                 {
                     case 0:
                         
-                        if(ImagePreprocessingList.Count > 0)
+                        if(ImagePreprocessingList.Count != 0)
                         {
-                            image = ImagePreprocessingList[ImagePreprocessingList.Count-1].ImageNew;
+                            image = ImagePreprocessingList[ImagePreprocessingList.Count-1 ].ImageNew;
+                            MessageBox.Show(image);
                         }
                         else
                         {
@@ -59,14 +60,16 @@ namespace NAGN.Model
                         Threshold threshold = new Threshold()
                         {
                             Name = "Threshold",
-                            ImageOld = image
+                            ImageOld = image,
+                            ImageNew = image,
                         };
                         ImagePreprocessingList.Add(threshold);
                         break;
                     case 1:
-                        if (ImagePreprocessingList.Count > 0)
+                        if (ImagePreprocessingList.Count != 0)
                         {
                             image = ImagePreprocessingList[ImagePreprocessingList.Count - 1].ImageNew;
+                            MessageBox.Show(image);
                         }
                         else
                         {
@@ -75,7 +78,9 @@ namespace NAGN.Model
                         Blur blur = new Blur()
                         {
                             Name = "Blur",
-                            ImageOld = image
+                            ImageOld = image,
+                            ImageNew = image,
+                            Ksize = 1
                         };
                         ImagePreprocessingList.Add(blur);
                         break;
@@ -102,7 +107,10 @@ namespace NAGN.Model
             foreach (var imagePreprocessing in ImagePreprocessingList)
             {
                 if (imagePreprocessing != ImagePreprocessingList[0])
+                {
                     imagePreprocessing.ImageOld = image;
+                } 
+                imagePreprocessing.UpdateImageNotSend();
                 imagePreprocessing.UpdateImage();
                 image = imagePreprocessing.ImageNew;
             };

@@ -17,12 +17,26 @@ namespace NAGN.Model
                 OnPropertyChanged();
             } }
         
-        public override void UpdateImage()
+        public override void UpdateImageAndSend()
         {
             if (string.IsNullOrEmpty(this.ImageOld)) return;
             BitmapImage bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
             BitmapSource bitmapSource = NAGN_CV.nagnCV.Blur(bitmap, Ksize);
-            this.ImageNew = NAGN_CV.nagnCV.BitmapToString(bitmapSource);
+            ImageIntermediate = bitmapSource;
+            Event.SendImage(bitmapSource);
+        }
+        public override void UpdateImageNotSend()
+        {
+            if (string.IsNullOrEmpty(this.ImageOld)) return;
+            BitmapImage bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            BitmapSource bitmapSource = NAGN_CV.nagnCV.Blur(bitmap, Ksize);
+            ImageIntermediate = bitmapSource;
+        }
+        public override void UpdateImage()
+        {
+            if (string.IsNullOrEmpty(this.ImageOld)) return;
+            this.ImageNew = NAGN_CV.nagnCV.BitmapToString(ImageIntermediate);
+            ImageIntermediate = null;
         }
     }
 }

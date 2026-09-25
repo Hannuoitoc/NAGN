@@ -24,7 +24,6 @@ namespace NAGN.Model
         public ICommand RemoveOutputImageCommand { get; }
         public FOV()
         {
-            // 2. Nối Command với hàm RemoveOutputImage
             RemoveOutputImageCommand = new RelayCommand<OutputImage>(RemoveOutputImage);
         }
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -51,7 +50,8 @@ namespace NAGN.Model
             var outputImage = new OutputImage()
             {
                 Name = "Output Image " + (OutputImageslist.Count + 1),
-                IdFOV = Id
+                IdFOV = Id,
+                FilePathImage = ImageFilePath
             };
             OutputImageslist.Add(outputImage);
         }
@@ -63,6 +63,17 @@ namespace NAGN.Model
                 
             }
         }
-       
+        public void updateOutputImageslist(string value)
+        {
+            if (ImageFilePath != null)
+            {
+                foreach(var imageOut in OutputImageslist)
+                {
+                    imageOut.FilePathImage=value;
+                    imageOut.updateImagePreprocessingList();
+                }
+            }
+        }
+        
     }
 }

@@ -9,16 +9,28 @@ namespace NAGN.Services
 {
     public class JsonService
     {
-        public static void SaveToJson(Model.Program program,string filePath)
+        // Khai báo cấu hình chung cho Json.NET
+        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
         {
-            string jsonString = JsonConvert.SerializeObject(program, Formatting.Indented);
+            TypeNameHandling = TypeNameHandling.Auto, // Tự động lưu và đọc kiểu dữ liệu thực tế (Threshold, Blur,...)
+            Formatting = Formatting.Indented           // Căn chỉnh đẹp dòng JSON
+        };
+
+        public static void SaveToJson(Model.Program program, string filePath)
+        {
+            // Truyền JsonSettings vào SerializeObject
+            string jsonString = JsonConvert.SerializeObject(program, JsonSettings);
             File.WriteAllText(filePath, jsonString);
         }
+
         public static Model.Program LoadFromJson(string filePath)
         {
             if (!File.Exists(filePath)) return null;
+
             string jsonString = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<Model.Program>(jsonString);
+
+            // Truyền JsonSettings vào DeserializeObject
+            return JsonConvert.DeserializeObject<Model.Program>(jsonString, JsonSettings);
         }
     }
 }

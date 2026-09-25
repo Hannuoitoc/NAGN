@@ -21,6 +21,12 @@
         <DataTemplate DataType="{x:Type model:Algorithms}">
             <view:PropertiesAlgorithm />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type model:Threshold}">
+            <viewImagePreprocessing:ThresholdView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type model:Blur}">
+            <viewImagePreprocessing:BlurView />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -186,7 +192,7 @@
                             BorderBrush="White"
                             BorderThickness="1"
                             Margin="5">
-                        <viewImagePreprocessing:ThresholdView />
+                        <ContentControl x:Name="ContentControlSettingAlgorithms" />
                     </Border>
                 </Grid>
             </Border>

@@ -15,14 +15,19 @@ using System.Windows.Shapes;
 
 namespace NAGN.View.Image_preprocessing
 {
-    /// <summary>
-    /// Interaction logic for ImagePreprocessing.xaml
-    /// </summary>
+    
     public partial class ImagePreprocessing : UserControl
     {
+        public event EventHandler<Model.ImagePreprocessParent> OnImagePreprocessSetting;
         public ImagePreprocessing()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is Model.ImagePreprocessParent imagePreprocessing)
+                OnImagePreprocessSetting?.Invoke(this, imagePreprocessing);
         }
     }
 }

@@ -1,30 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace NAGN.Model
 {
 
-    public class Threshold: INotifyPropertyChanged
+    public class Threshold : ImagePreprocessParent
     {
-        private string _name { get; set; }
-        public string Name
+        private double _min { get; set; }
+        private double _max { get; set; }
+
+        public double Min
         {
-            get => _name;
-            set{
-                _name = value;
+            get => _min;
+            set
+            {
+                _min = value;
                 OnPropertyChanged();
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public double Max
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => _max;
+            set
+            {
+                _max = value;
+                OnPropertyChanged();
+            }
+        }
+        public override void UpdateImage()
+        {
+            if (string.IsNullOrEmpty(this.ImageOld)) return;
+            BitmapImage bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld); 
+            BitmapSource bitmapSource = NAGN_CV.nagnCV.Threshold(bitmap, Min, Max);
+            this.ImageNew = NAGN_CV.nagnCV.BitmapToString(bitmapSource);
         }
     }
 }

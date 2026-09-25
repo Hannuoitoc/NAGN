@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -19,7 +20,13 @@ namespace NAGN.Model
             get => _name;
             set { _name = value;  OnPropertyChanged(); }
         }
-        public ObservableCollection<Threshold> ImagePreprocessingList { get; set; } = new ObservableCollection<Threshold>();
+        private string _filePathImage { get; set; }
+        public string FilePathImage
+        {
+            get => _filePathImage;
+            set { _filePathImage = value; OnPropertyChanged();}
+        }
+        public ObservableCollection<ImagePreprocessParent> ImagePreprocessingList { get; set; } = new ObservableCollection<ImagePreprocessParent>();
         public int IdFOV { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -36,17 +43,41 @@ namespace NAGN.Model
             View.Image_preprocessing.InputImagePreprocessing inputImagePreprocessing = new View.Image_preprocessing.InputImagePreprocessing() { Owner = System.Windows.Application.Current.MainWindow };
             if (inputImagePreprocessing.ShowDialog() == true)
             {
+                string image;
                 switch (inputImagePreprocessing.IdInputImagePreprocessing)
                 {
                     case 0:
+                        
+                        if(ImagePreprocessingList.Count > 0)
+                        {
+                            image = ImagePreprocessingList[ImagePreprocessingList.Count-1].ImageNew;
+                        }
+                        else
+                        {
+                            image = ImageToString(FilePathImage);
+                        }
                         Threshold threshold = new Threshold()
                         {
-                            Name = "Threshold"
+                            Name = "Threshold",
+                            ImageOld = image
                         };
                         ImagePreprocessingList.Add(threshold);
                         break;
                     case 1:
-                        MessageBox.Show("Blur");
+                        if (ImagePreprocessingList.Count > 0)
+                        {
+                            image = ImagePreprocessingList[ImagePreprocessingList.Count - 1].ImageNew;
+                        }
+                        else
+                        {
+                            image = ImageToString(FilePathImage);
+                        }
+                        Blur blur = new Blur()
+                        {
+                            Name = "Blur",
+                            ImageOld = image
+                        };
+                        ImagePreprocessingList.Add(blur);
                         break;
                     case 2:
                         break;
@@ -54,6 +85,27 @@ namespace NAGN.Model
                         break;
                 }
             }
+        }
+        public string ImageToString(string filePath)
+        {
+            if(filePath == null)
+                return string.Empty;
+            byte[] imageBytes = File.ReadAllBytes(filePath);
+            string base64String = Convert.ToBase64String(imageBytes);
+            return base64String;
+        }
+        public void updateImagePreprocessingList()
+        {
+            if(ImagePreprocessingList.Count !=0)
+                ImagePreprocessingList[0].ImageOld = ImageToString(FilePathImage);
+            string image=null;
+            foreach (var imagePreprocessing in ImagePreprocessingList)
+            {
+                if (imagePreprocessing != ImagePreprocessingList[0])
+                    imagePreprocessing.ImageOld = image;
+                imagePreprocessing.UpdateImage();
+                image = imagePreprocessing.ImageNew;
+            };
         }
     }
 }

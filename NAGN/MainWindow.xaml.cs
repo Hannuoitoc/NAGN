@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,7 +26,12 @@ namespace NAGN
         public MainWindow()
         {
             InitializeComponent();
-            
+            Event.OnImagePreprocessSetting += Event_OnImagePreprocessSetting;
+        }
+
+        private void Event_OnImagePreprocessSetting(Model.ImagePreprocessParent imagePreprocess)
+        {
+            ContentControlSettingAlgorithms.Content = imagePreprocess;
         }
 
         private void Button_Click_Add_Node(object sender, RoutedEventArgs e)
@@ -62,9 +67,19 @@ namespace NAGN
             };
             if (openFileDialog.ShowDialog() == true)
             {
+                // 1. Load chương trình mới
                 program_new = Services.JsonService.LoadFromJson(openFileDialog.FileName);
-                string jsonCopy = System.Text.Json.JsonSerializer.Serialize(program_new);
-                program_old = System.Text.Json.JsonSerializer.Deserialize<Model.Program>(jsonCopy);
+
+                // 2. Clone sang program_old bằng Newtonsoft.Json (Dùng cấu hình TypeNameHandling)
+                var settings = new Newtonsoft.Json.JsonSerializerSettings
+                {
+                    TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto
+                };
+
+                string jsonCopy = Newtonsoft.Json.JsonConvert.SerializeObject(program_new, settings);
+                program_old = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Program>(jsonCopy, settings);
+
+                // 3. Cập nhật TreeView
                 treeViewProgram.updateTreeView(program_new);
             }
         }
@@ -87,14 +102,27 @@ namespace NAGN
                         program_new.FilePath = saveFileDialog.FileName;
                         Services.JsonService.SaveToJson(program_new, program_new.FilePath);
                     }
+                    else
+                    {
+                        return; // Hủy lưu nếu người dùng bấm Cancel
+                    }
                 }
                 else
                 {
-                    Services.JsonService.SaveToJson(program_new, program_new.FilePath); ;
+                    Services.JsonService.SaveToJson(program_new, program_new.FilePath);
                 }
+
+                // Reload lại chương trình
                 program_new = Services.JsonService.LoadFromJson(program_new.FilePath);
-                string jsonCopy = System.Text.Json.JsonSerializer.Serialize(program_new);
-                program_old = System.Text.Json.JsonSerializer.Deserialize<Model.Program>(jsonCopy);
+
+                // DEEP CLONE DÙNG NEWTONSOFT.JSON (Thay thế hoàn toàn System.Text.Json)
+                var settings = new Newtonsoft.Json.JsonSerializerSettings
+                {
+                    TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto
+                };
+
+                string jsonCopy = Newtonsoft.Json.JsonConvert.SerializeObject(program_new, settings);
+                program_old = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Program>(jsonCopy, settings);
             }
         }
 
@@ -114,7 +142,7 @@ namespace NAGN
         {
             if(program_new != null)
             {
-                if (JsonSerializer.Serialize(program_new) != JsonSerializer.Serialize(program_old))
+                if (Newtonsoft.Json.JsonConvert.SerializeObject(program_new, Newtonsoft.Json.Formatting.Indented) != Newtonsoft.Json.JsonConvert.SerializeObject(program_old, Newtonsoft.Json.Formatting.Indented))
                 {
                     if (MessageBox.Show("Bạn chưa lưu model hiện tại bạn muốn lưu không?", "Cảnh báo", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {

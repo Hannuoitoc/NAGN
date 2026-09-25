@@ -7,10 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Button Background="Gray" HorizontalContentAlignment="Stretch">
+        <Button Background="Gray"
+                HorizontalContentAlignment="Stretch"
+                Command="{Binding OutputImageCommand}"
+                Click="Button_Click">
             <DockPanel Margin="10">
                 <TextBlock Text="{Binding Name}" DockPanel.Dock="Left"/>
-                <Button Content="🗑" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                <Button Content="🗑"
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Right"
+                        />
             </DockPanel>
         </Button>
     </Grid>

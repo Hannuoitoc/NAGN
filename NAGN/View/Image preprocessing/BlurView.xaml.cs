@@ -15,18 +15,22 @@ using System.Windows.Shapes;
 
 namespace NAGN.View.Image_preprocessing
 {
-    public partial class ThresholdView : UserControl
+    /// <summary>
+    /// Interaction logic for BlurView.xaml
+    /// </summary>
+    public partial class BlurView : UserControl
     {
-        public ThresholdView()
+        public BlurView()
         {
             InitializeComponent();
         }
+
         private void ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (DataContext is Model.Threshold threshold)
+            if (DataContext is Model.Blur blur)
             {
-                threshold.UpdateImage();
-                threshold.SendImage();
+                blur.UpdateImage();
+                blur.SendImage();
             }
             Event.IsPreprocessingChanged();
         }

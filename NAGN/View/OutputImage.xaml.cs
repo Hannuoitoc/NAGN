@@ -23,8 +23,13 @@ namespace NAGN.View
         public OutputImage()
         {
             InitializeComponent();
+            Event.OnPreprecessingChanged += Event_OnPreprecessingChanged;
+        }
+        private void Event_OnPreprecessingChanged()
+        {
+            if (DataContext is Model.OutputImage outputimage)
+                outputimage.updateImagePreprocessingList();
         }
 
-        
     }
 }

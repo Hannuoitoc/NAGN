@@ -18,9 +18,10 @@
                 <Slider x:Name="ThresHoldMinSlider"
                         Minimum="0"
                         Maximum="255"
-                        Value="128"
+                        Value="{Binding Min,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         VerticalAlignment="Center"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        ValueChanged="ValueChanged" />
                 <TextBox Text="{Binding Value, ElementName=ThresHoldMinSlider, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:F0}'}"
                          Width="Auto"
                          HorizontalAlignment="Right"
@@ -35,9 +36,10 @@
                 <Slider x:Name="ThresHoldMaxSlider"
                         Minimum="0"
                         Maximum="255"
-                        Value="128"
+                        Value="{Binding Max,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         VerticalAlignment="Center"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        ValueChanged="ValueChanged" />
                 <TextBox Text="{Binding Value, ElementName=ThresHoldMaxSlider, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:F0}'}"
                          Width="Auto"
                          HorizontalAlignment="Right"

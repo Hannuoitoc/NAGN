@@ -19,6 +19,11 @@
   <ItemGroup>
     <PackageReference Include="JsonConverter.Abstractions" Version="0.13.0" />
     <PackageReference Include="JsonConverter.Newtonsoft.Json" Version="0.13.0" />
+    <PackageReference Include="OpenCvSharp4" Version="4.13.0.20260627" />
+    <PackageReference Include="OpenCvSharp4.Extensions" Version="4.13.0.20260627" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260627" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.13.0.20260627" />
+    <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.13.0.20260627" />
   </ItemGroup>
 
   <ItemGroup>

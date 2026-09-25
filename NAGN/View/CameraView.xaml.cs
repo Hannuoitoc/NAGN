@@ -26,6 +26,12 @@ namespace NAGN.View
         public CameraView()
         {
             InitializeComponent();
+            Event.OnImageProcessed += Event_OnImageProcessed;
+        }
+
+        private void Event_OnImageProcessed(BitmapSource image)
+        {
+            ImageScreen.Source = image;
         }
 
         private void Click_Open_Image(object sender, RoutedEventArgs e)
@@ -54,6 +60,12 @@ namespace NAGN.View
                         bitmap.Freeze();
                     }
                     ImageScreen.Source = bitmap;
+                    if(FOV.ImageFilePath != null)
+                    {
+
+                        FOV.updateOutputImageslist(filePath);
+                    }
+                        
                     FOV.ImageFilePath = filePath;
                 }
             }

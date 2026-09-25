@@ -23,6 +23,20 @@ namespace NAGN.View.Image_preprocessing
         public ListImagePreprocessing()
         {
             InitializeComponent();
+            
+        }
+
+        
+
+        private void ImagePreprocessing_OnImagePreprocessSetting(object sender, Model.ImagePreprocessParent e)
+        {
+            if(e is Model.Threshold threshold)
+            {
+                Event.SendImagePreprocess(threshold);
+            }else if(e is Model.Blur blur)
+            {
+                Event.SendImagePreprocess(blur);
+            }
         }
     }
 }

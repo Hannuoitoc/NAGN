@@ -17,7 +17,7 @@
     </UserControl.Resources>
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding}" />
+            <ItemsControl ItemsSource="{Binding}" x:Name="ItemsControlOutputImagesList"/>
         </ScrollViewer>
     </Grid>
 </UserControl>

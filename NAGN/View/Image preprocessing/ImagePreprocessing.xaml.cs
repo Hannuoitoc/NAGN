@@ -28,8 +28,8 @@ namespace NAGN.View.Image_preprocessing
         {
             if (DataContext is Model.ImagePreprocessParent imagePreprocessing)
             {
-                OnImagePreprocessSetting?.Invoke(this, imagePreprocessing);
-                
+                imagePreprocessing.UpdateImageAndSend();
+                OnImagePreprocessSetting?.Invoke(sender,imagePreprocessing);
             }   
         }
     }

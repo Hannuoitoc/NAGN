@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace NAGN.Model
 {
@@ -34,10 +35,31 @@ namespace NAGN.Model
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public ICommand AddImagePreprocessingCommand { get; }
+        public ICommand SendImageOutputCommand { get; }
+        public ICommand RemoveImagePreprocessingCommand { get; }
         public OutputImage()
         {
             AddImagePreprocessingCommand = new RelayCommand(AddImagePreprocessing);
+            SendImageOutputCommand = new RelayCommand<OutputImage>(SendImageOutput);
+            RemoveImagePreprocessingCommand = new RelayCommand<ImagePreprocessParent>(RemoveImagePreprocessing);
         }
+
+        private void RemoveImagePreprocessing(ImagePreprocessParent imagePreprocessParent)
+        {
+            if(imagePreprocessParent!=null&&ImagePreprocessingList.Contains(imagePreprocessParent))
+                ImagePreprocessingList.Remove(imagePreprocessParent);
+        }
+
+        private void SendImageOutput(OutputImage outputimage)
+        {
+            BitmapSource imageSource=null;
+            if (outputimage.ImagePreprocessingList.Count >0)
+                imageSource = NAGN_CV.nagnCV.StringToBitmap(outputimage.ImagePreprocessingList[outputimage.ImagePreprocessingList.Count - 1].ImageNew);
+            else
+                imageSource = NAGN_CV.nagnCV.StringToBitmap(ImageToString(outputimage.FilePathImage));
+            Event.SendImage(imageSource);
+        }
+
         public void AddImagePreprocessing()
         {
             View.Image_preprocessing.InputImagePreprocessing inputImagePreprocessing = new View.Image_preprocessing.InputImagePreprocessing() { Owner = System.Windows.Application.Current.MainWindow };
@@ -51,7 +73,6 @@ namespace NAGN.Model
                         if(ImagePreprocessingList.Count != 0)
                         {
                             image = ImagePreprocessingList[ImagePreprocessingList.Count-1 ].ImageNew;
-                            MessageBox.Show(image);
                         }
                         else
                         {
@@ -69,7 +90,6 @@ namespace NAGN.Model
                         if (ImagePreprocessingList.Count != 0)
                         {
                             image = ImagePreprocessingList[ImagePreprocessingList.Count - 1].ImageNew;
-                            MessageBox.Show(image);
                         }
                         else
                         {

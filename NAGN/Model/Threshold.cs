@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -52,9 +53,12 @@ namespace NAGN.Model
         }
         public override void UpdateImage()
         {
-            if (string.IsNullOrEmpty(this.ImageOld)) return;
+            if (string.IsNullOrEmpty(this.ImageOld))
+            {
+                return;
+            }
             this.ImageNew = NAGN_CV.nagnCV.BitmapToString(ImageIntermediate);
-            ImageIntermediate = null;
+            
         }
     }
 }

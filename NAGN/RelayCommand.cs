@@ -29,11 +29,17 @@ namespace NAGN
     {
         private readonly Action<T> _execute;
         private readonly Predicate<T> _canExecute;
+        private ICommand? sendImageOutputComand;
 
         public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
+        }
+
+        public RelayCommand(ICommand? sendImageOutputComand)
+        {
+            this.sendImageOutputComand = sendImageOutputComand;
         }
 
         public bool CanExecute(object parameter)

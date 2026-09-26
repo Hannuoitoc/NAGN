@@ -30,5 +30,6 @@ namespace NAGN.View
             if (DataContext is Model.OutputImage outputimage)
                 outputimage.updateImagePreprocessingList();
         }
+
     }
 }

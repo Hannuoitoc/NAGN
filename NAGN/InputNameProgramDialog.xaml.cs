@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +19,7 @@ namespace NAGN
     /// </summary>
     public partial class InputNameProgramDialog : Window
     {
-        public string ProgramName { get; set; }
+        public string ProgramName { get; set; } = string.Empty;
         public InputNameProgramDialog()
         {
             InitializeComponent();

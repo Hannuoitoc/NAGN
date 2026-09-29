@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="NAGN.View.PropertiesAlgorithm"
+<UserControl x:Class="NAGN.View.PropertiesAlgorithm"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -42,12 +42,42 @@
                         BorderBrush="White"
                         BorderThickness="0,0,0,1"
                         Padding="0,0,0,10">
-                    <Expander Header="ROI" IsExpanded="True"  >
-                        <StackPanel>
-                            <TextBlock Text="Sap ra mat!" />
-                            <TextBlock Text="Sap ra mat!" />
-                            <TextBlock Text="Sap ra mat!" />
-                            <TextBlock Text="Sap ra mat!" />
+                    <Expander Header="ROI (Vùng quan tâm)" IsExpanded="True">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="ROI Name" Margin="0,2,0,2"/>
+                            <TextBox Text="{Binding Roi.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock Text="ROI Type" Margin="0,5,0,2"/>
+                            <TextBox Text="{Binding Roi.Type, Mode=OneWay}" IsReadOnly="True" Background="#EEEEEE" />
+
+                            <Grid Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,2,0">
+                                    <TextBlock Text="X (px)" />
+                                    <TextBox Text="{Binding Roi.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:F1}'}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,0,0">
+                                    <TextBlock Text="Y (px)" />
+                                    <TextBox Text="{Binding Roi.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:F1}'}" />
+                                </StackPanel>
+                            </Grid>
+                            <Grid Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Margin="0,0,2,0">
+                                    <TextBlock Text="Width (px)" />
+                                    <TextBox Text="{Binding Roi.Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:F1}'}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="2,0,0,0">
+                                    <TextBlock Text="Height (px)" />
+                                    <TextBox Text="{Binding Roi.Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:F1}'}" />
+                                </StackPanel>
+                            </Grid>
                         </StackPanel>
                     </Expander>
                 </Border>

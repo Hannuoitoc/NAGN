@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,17 +10,24 @@ namespace NAGN.Model
 {
     public class Blur : ImagePreprocessParent
     {
-        private int _ksize { get; set; }
-        public int Ksize { get=>_ksize; set
+        private int _ksize = 3;
+        public int Ksize
+        {
+            get => _ksize;
+            set
             {
-                _ksize = value;
+                int val = value < 3 ? 3 : value;
+                if (val % 2 == 0) val += 1;
+                _ksize = val;
                 OnPropertyChanged();
-            } }
+            }
+        }
         
         public override void UpdateImageAndSend()
         {
             if (string.IsNullOrEmpty(this.ImageOld)) return;
-            BitmapImage bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            BitmapImage? bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            if (bitmap == null) return;
             BitmapSource bitmapSource = NAGN_CV.nagnCV.Blur(bitmap, Ksize);
             ImageIntermediate = bitmapSource;
             Event.SendImage(bitmapSource);
@@ -28,15 +35,19 @@ namespace NAGN.Model
         public override void UpdateImageNotSend()
         {
             if (string.IsNullOrEmpty(this.ImageOld)) return;
-            BitmapImage bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            BitmapImage? bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            if (bitmap == null) return;
             BitmapSource bitmapSource = NAGN_CV.nagnCV.Blur(bitmap, Ksize);
             ImageIntermediate = bitmapSource;
         }
         public override void UpdateImage()
         {
             if (string.IsNullOrEmpty(this.ImageOld)) return;
-            this.ImageNew = NAGN_CV.nagnCV.BitmapToString(ImageIntermediate);
-            ImageIntermediate = null;
+            if (ImageIntermediate != null)
+            {
+                this.ImageNew = NAGN_CV.nagnCV.BitmapToString(ImageIntermediate);
+                ImageIntermediate = null;
+            }
         }
     }
 }

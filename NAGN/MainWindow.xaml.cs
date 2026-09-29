@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,8 +21,8 @@ namespace NAGN
     
     public partial class MainWindow : Window
     {
-        public Model.Program program_new { get; set; }
-        public Model.Program program_old { get; set; }
+        public Model.Program? program_new { get; set; }
+        public Model.Program? program_old { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -37,18 +37,21 @@ namespace NAGN
         private void Button_Click_Add_Node(object sender, RoutedEventArgs e)
         {
             treeViewProgram.NewNode();
-            
         }
+
         private void Button_Click_Remove_Node(object sender, RoutedEventArgs e)
         {
-            treeViewProgram.RemoveNode(program_new);
+            if (program_new != null)
+            {
+                treeViewProgram.RemoveNode(program_new);
+            }
         }
 
         private void Button_Click_New_Program(object sender, RoutedEventArgs e)
         {
             IsSave();
             InputNameProgramDialog inputNameProgramDialog = new InputNameProgramDialog() { Owner = this };
-            if(inputNameProgramDialog.ShowDialog() == true)
+            if (inputNameProgramDialog.ShowDialog() == true)
             {
                 program_old = null;
                 program_new = Model.Program.newProgram(inputNameProgramDialog.ProgramName);
@@ -61,98 +64,125 @@ namespace NAGN
             IsSave();
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
-                InitialDirectory = @"C:\Downloads",
+                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
                 Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
                 Title = "Mở model"
             };
             if (openFileDialog.ShowDialog() == true)
             {
                 // 1. Load chương trình mới
-                program_new = Services.JsonService.LoadFromJson(openFileDialog.FileName);
-
-                // 2. Clone sang program_old bằng Newtonsoft.Json (Dùng cấu hình TypeNameHandling)
-                var settings = new Newtonsoft.Json.JsonSerializerSettings
+                var loaded = Services.JsonService.LoadFromJson(openFileDialog.FileName);
+                if (loaded != null)
                 {
-                    TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto
-                };
+                    program_new = loaded;
+                    program_new.FilePath = openFileDialog.FileName;
 
-                string jsonCopy = Newtonsoft.Json.JsonConvert.SerializeObject(program_new, settings);
-                program_old = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Program>(jsonCopy, settings);
+                    // 2. Clone sang program_old bằng Newtonsoft.Json
+                    var settings = new Newtonsoft.Json.JsonSerializerSettings
+                    {
+                        TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto
+                    };
 
-                // 3. Cập nhật TreeView
-                treeViewProgram.updateTreeView(program_new);
+                    string jsonCopy = Newtonsoft.Json.JsonConvert.SerializeObject(program_new, settings);
+                    program_old = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Program>(jsonCopy, settings);
+
+                    // 3. Cập nhật TreeView
+                    treeViewProgram.updateTreeView(program_new);
+                }
             }
         }
 
         private void Button_Click_Save_Program(object sender, RoutedEventArgs e)
         {
-            if(program_new != null)
+            if (program_new != null)
             {
-                if (program_old == null)
+                if (string.IsNullOrEmpty(program_new.FilePath) || program_old == null)
                 {
                     SaveFileDialog saveFileDialog = new SaveFileDialog()
                     {
-                        InitialDirectory = @"C:\Downloads",
-                        FileName = $"{program_new.Name.Trim()}.json",
+                        InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                        FileName = $"{program_new.Name?.Trim() ?? "Program"}.json",
                         Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
                         Title = "Lưu model"
                     };
                     if (saveFileDialog.ShowDialog() == true)
                     {
                         program_new.FilePath = saveFileDialog.FileName;
-                        Services.JsonService.SaveToJson(program_new, program_new.FilePath);
                     }
                     else
                     {
                         return; // Hủy lưu nếu người dùng bấm Cancel
                     }
                 }
-                else
-                {
-                    Services.JsonService.SaveToJson(program_new, program_new.FilePath);
-                }
+
+                Services.JsonService.SaveToJson(program_new, program_new.FilePath!);
 
                 // Reload lại chương trình
-                program_new = Services.JsonService.LoadFromJson(program_new.FilePath);
+                program_new = Services.JsonService.LoadFromJson(program_new.FilePath!);
 
-                // DEEP CLONE DÙNG NEWTONSOFT.JSON (Thay thế hoàn toàn System.Text.Json)
-                var settings = new Newtonsoft.Json.JsonSerializerSettings
+                if (program_new != null)
                 {
-                    TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto
-                };
+                    var settings = new Newtonsoft.Json.JsonSerializerSettings
+                    {
+                        TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto
+                    };
 
-                string jsonCopy = Newtonsoft.Json.JsonConvert.SerializeObject(program_new, settings);
-                program_old = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Program>(jsonCopy, settings);
+                    string jsonCopy = Newtonsoft.Json.JsonConvert.SerializeObject(program_new, settings);
+                    program_old = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Program>(jsonCopy, settings);
+                }
             }
         }
 
-        private void treeViewProgram_OnSelected_FOV(object sender, Model.FOV selectedFOV)
+        private void treeViewProgram_OnSelected_FOV(object sender, Model.FOV? selectedFOV)
         {
             ContentControlProperties.Content = selectedFOV;
             CameraView.FOV = selectedFOV;
+            CameraView.Algorithm = null;
             CameraView.DataContext = selectedFOV;
             CameraView.SelectedImageFromFOV(selectedFOV);
         }
 
-        private void treeViewProgram_OnSelected_Algorithm(object sender, Model.Algorithms algorithms)
+        private void treeViewProgram_OnSelected_Algorithm(object sender, Model.Algorithms? algorithms)
         {
             ContentControlProperties.Content = algorithms;
+            CameraView.Algorithm = algorithms;
+
+            Model.FOV? parentFov = null;
+            if (program_new != null && algorithms != null)
+            {
+                parentFov = program_new.FOVlist.FirstOrDefault(f => f.Algorithmslist.Contains(algorithms))
+                         ?? program_new.FOVlist.FirstOrDefault(f => f.Id == algorithms.IdFOV);
+            }
+
+            if (parentFov != null)
+            {
+                CameraView.FOV = parentFov;
+                CameraView.SelectedImageFromFOV(parentFov);
+            }
+            else
+            {
+                CameraView.RedrawRoi();
+            }
         }
+
         private void IsSave()
         {
-            if(program_new != null)
+            if (program_new != null)
             {
-                if (Newtonsoft.Json.JsonConvert.SerializeObject(program_new, Newtonsoft.Json.Formatting.Indented) != Newtonsoft.Json.JsonConvert.SerializeObject(program_old, Newtonsoft.Json.Formatting.Indented))
+                string newJson = Newtonsoft.Json.JsonConvert.SerializeObject(program_new, Newtonsoft.Json.Formatting.None);
+                string oldJson = program_old != null ? Newtonsoft.Json.JsonConvert.SerializeObject(program_old, Newtonsoft.Json.Formatting.None) : string.Empty;
+
+                if (newJson != oldJson)
                 {
-                    if (MessageBox.Show("Bạn chưa lưu model hiện tại bạn muốn lưu không?", "Cảnh báo", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if (MessageBox.Show("Bạn chưa lưu model hiện tại, bạn có muốn lưu không?", "Cảnh báo", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        Button_Click_Save_Program(null, null);
+                        Button_Click_Save_Program(this, new RoutedEventArgs());
                     }
                     else
                     {
                         program_old = null;
                     }
-                };
+                }
             }
         }
 
@@ -163,24 +193,26 @@ namespace NAGN
 
         private void Click_Close_Open(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-            if(button.Name == "btn_Close_Open_Program")
+            if (sender is Button button)
             {
-                bool isSildeBar = Grid_Program.Width.Value > 70;
-                Grid_Program.Width = new GridLength(isSildeBar ? 25 : 200);
-                btn_Close_Open_Program.Content = (Grid_Program.Width.Value > 70) ? "◀" : "▶";
-            }
-            else if(button.Name == "btn_Close_Open_Properties")
-            {
-                bool isSildeBar = Grid_Properties.Width.Value > 70;
-                Grid_Properties.Width = new GridLength(isSildeBar ? 25 : 200);
-                btn_Close_Open_Properties.Content = (Grid_Properties.Width.Value > 70) ? "◀" : "▶";
-            }
-            else
-            {
-                bool isSildeBar = Grid_Setting_Algorithms.Width.Value > 70;
-                Grid_Setting_Algorithms.Width = new GridLength(isSildeBar ? 25 : 200);
-                btn_Close_Open_Setting_Algorithms.Content = (Grid_Setting_Algorithms.Width.Value > 70) ? "◀" : "▶";
+                if (button.Name == "btn_Close_Open_Program")
+                {
+                    bool isSildeBar = Grid_Program.Width.Value > 70;
+                    Grid_Program.Width = new GridLength(isSildeBar ? 25 : 200);
+                    btn_Close_Open_Program.Content = (Grid_Program.Width.Value > 70) ? "◀" : "▶";
+                }
+                else if (button.Name == "btn_Close_Open_Properties")
+                {
+                    bool isSildeBar = Grid_Properties.Width.Value > 70;
+                    Grid_Properties.Width = new GridLength(isSildeBar ? 25 : 200);
+                    btn_Close_Open_Properties.Content = (Grid_Properties.Width.Value > 70) ? "◀" : "▶";
+                }
+                else
+                {
+                    bool isSildeBar = Grid_Setting_Algorithms.Width.Value > 70;
+                    Grid_Setting_Algorithms.Width = new GridLength(isSildeBar ? 25 : 200);
+                    btn_Close_Open_Setting_Algorithms.Content = (Grid_Setting_Algorithms.Width.Value > 70) ? "◀" : "▶";
+                }
             }
         }
 

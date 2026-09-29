@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,10 +15,9 @@ using System.Windows.Shapes;
 
 namespace NAGN.View.Image_preprocessing
 {
-    
     public partial class ImagePreprocessing : UserControl
     {
-        public event EventHandler<Model.ImagePreprocessParent> OnImagePreprocessSetting;
+        public event EventHandler<Model.ImagePreprocessParent?>? OnImagePreprocessSetting;
         public ImagePreprocessing()
         {
             InitializeComponent();
@@ -29,7 +28,8 @@ namespace NAGN.View.Image_preprocessing
             if (DataContext is Model.ImagePreprocessParent imagePreprocessing)
             {
                 imagePreprocessing.UpdateImageAndSend();
-                OnImagePreprocessSetting?.Invoke(sender,imagePreprocessing);
+                Event.SendImagePreprocess(imagePreprocessing);
+                OnImagePreprocessSetting?.Invoke(sender, imagePreprocessing);
             }   
         }
     }

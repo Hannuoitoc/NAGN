@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,19 +26,21 @@ namespace NAGN.View.Image_preprocessing
         }
 
 
-        private void Button_Click_Chosse_Image_Preprocessing(object sender, RoutedEventArgs e)
+        private void Button_Click_Choose_Image_Preprocessing(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            switch (button.Name)
+            if (sender is Button button)
             {
-                case "Threshold":
-                    IdInputImagePreprocessing = 0;
-                    break;
-                case "Blur":
-                    IdInputImagePreprocessing = 1;
-                    break;
+                switch (button.Name)
+                {
+                    case "Threshold":
+                        IdInputImagePreprocessing = 0;
+                        break;
+                    case "Blur":
+                        IdInputImagePreprocessing = 1;
+                        break;
+                }
+                this.DialogResult = true;
             }
-            this.DialogResult = true;
         }
     }
 }

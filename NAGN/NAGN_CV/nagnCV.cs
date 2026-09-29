@@ -1,4 +1,4 @@
-﻿using OpenCvSharp;
+using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
 using System;
 using System.Collections.Generic;
@@ -15,12 +15,23 @@ namespace NAGN.NAGN_CV
     {
         public static BitmapSource Threshold(BitmapImage image, double min, double max)
         {
+            min = Math.Clamp(min, 0, 255);
+            max = Math.Clamp(max, 0, 255);
+            if (min > max)
+            {
+                double temp = min;
+                min = max;
+                max = temp;
+            }
+
             using (Mat imageMat = image.ToMat())
             using (Mat grayImage = new Mat())
             using (Mat thresholdImage = new Mat())
             {
                 if (imageMat.Channels() == 1)
-                imageMat.CopyTo(grayImage);
+                {
+                    imageMat.CopyTo(grayImage);
+                }
                 else
                 {
                     ColorConversionCodes colorConversionCodes = (imageMat.Channels() == 3) ? ColorConversionCodes.RGB2GRAY : ColorConversionCodes.RGBA2GRAY;
@@ -32,45 +43,63 @@ namespace NAGN.NAGN_CV
                 return bs;
             }
         }
-        public static BitmapSource Blur(BitmapImage image,int ksize)
+        public static BitmapSource Blur(BitmapImage image, int ksize)
         {
+            if (ksize < 3) ksize = 3;
+            if (ksize % 2 == 0) ksize += 1;
+
             using (Mat imageMat = image.ToMat())
             using (Mat blurImage = new Mat())
             {
                 Cv2.MedianBlur(imageMat, blurImage, ksize);
-                BitmapSource bs = blurImage.ToBitmapSource(); ;
+                BitmapSource bs = blurImage.ToBitmapSource();
                 bs.Freeze();
                 return bs;
             }
         }
-        public static BitmapImage StringToBitmap(string image)
+        public static BitmapImage? StringToBitmap(string? image)
         {
-            byte[] imageBytes = Convert.FromBase64String(image);
-            using (MemoryStream ms = new MemoryStream(imageBytes))
+            if (string.IsNullOrWhiteSpace(image)) return null;
+            try
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.StreamSource = ms;
-                bitmap.EndInit();
-                bitmap.Freeze();
-                return bitmap;
+                byte[] imageBytes = Convert.FromBase64String(image);
+                using (MemoryStream ms = new MemoryStream(imageBytes))
+                {
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.StreamSource = ms;
+                    bitmap.EndInit();
+                    bitmap.Freeze();
+                    return bitmap;
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
-        public static string BitmapToString(BitmapSource image)
+        public static string BitmapToString(BitmapSource? image)
         {
             if (image == null) return string.Empty;
 
-            byte[] byteArray;
-            BitmapEncoder encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(image));
-
-            using (MemoryStream ms = new MemoryStream())
+            try
             {
-                encoder.Save(ms);
-                byteArray = ms.ToArray();
+                byte[] byteArray;
+                BitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(image));
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    encoder.Save(ms);
+                    byteArray = ms.ToArray();
+                }
+                return Convert.ToBase64String(byteArray);
             }
-            return Convert.ToBase64String(byteArray);
+            catch
+            {
+                return string.Empty;
+            }
         }
     }
 }

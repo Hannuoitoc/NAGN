@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,22 +11,28 @@ using System.Windows.Input;
 
 namespace NAGN.Model
 {
-    public class FOV:INotifyPropertyChanged
+    public class FOV : INotifyPropertyChanged
     {
         public int Id { get; set; }
-        private string _name;
-        public string Name { get => _name; set { _name = value; OnPropertyChanged(); } }
+        private string? _name;
+        public string? Name { get => _name; set { _name = value; OnPropertyChanged(); } }
         public int IdProgram { get; set; }
-        public string ImageFilePath { get; set; }
+        public string? ImageFilePath { get; set; }
         public ObservableCollection<Algorithms> Algorithmslist { get; set; } = new ObservableCollection<Algorithms>();
         public ObservableCollection<OutputImage> OutputImageslist { get; set; } = new ObservableCollection<OutputImage>(); 
-        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        [JsonIgnore]
         public ICommand RemoveOutputImageCommand { get; }
+
         public FOV()
         {
             RemoveOutputImageCommand = new RelayCommand<OutputImage>(RemoveOutputImage);
         }
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -36,15 +42,20 @@ namespace NAGN.Model
             var algorithm = new Algorithms()
             {
                 Id = Algorithmslist.Count,
-                Name = "algorithm" + (Algorithmslist.Count+1),
+                Name = "algorithm " + (Algorithmslist.Count + 1),
                 IdFOV = Id
             };
             Algorithmslist.Add(algorithm);
         }
-        public void removeFOV(Model.Program program, Model.FOV fov)
+
+        public void removeFOV(Model.Program? program, Model.FOV? fov)
         {
-            program.FOVlist.Remove(fov);
+            if (program != null && fov != null)
+            {
+                program.FOVlist.Remove(fov);
+            }
         }
+
         public void newOutputImage()
         {
             var outputImage = new OutputImage()
@@ -55,25 +66,26 @@ namespace NAGN.Model
             };
             OutputImageslist.Add(outputImage);
         }
-        public void RemoveOutputImage(OutputImage outputImage)
+
+        public void RemoveOutputImage(OutputImage? outputImage)
         {
             if (outputImage != null && OutputImageslist.Contains(outputImage))
             {
                 OutputImageslist.Remove(outputImage);
-                
             }
         }
-        public void updateOutputImageslist(string value)
+
+
+        public void updateOutputImageslist(string? value)
         {
-            if (ImageFilePath != null)
+            if (!string.IsNullOrEmpty(value))
             {
-                foreach(var imageOut in OutputImageslist)
+                foreach (var imageOut in OutputImageslist)
                 {
-                    imageOut.FilePathImage=value;
+                    imageOut.FilePathImage = value;
                     imageOut.updateImagePreprocessingList();
                 }
             }
         }
-        
     }
 }

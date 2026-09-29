@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="NAGN.View.Image_preprocessing.BlurView"
+<UserControl x:Class="NAGN.View.Image_preprocessing.BlurView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -17,7 +17,7 @@
             </Grid.ColumnDefinitions>
 
                 <Slider x:Name="KsizeMinSlider"
-                        Minimum="1"
+                        Minimum="3"
                         Maximum="21"
                         TickFrequency="2"
                         IsSnapToTickEnabled="True"

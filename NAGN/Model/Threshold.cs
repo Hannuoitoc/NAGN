@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -12,18 +12,17 @@ using System.Windows.Media.Imaging;
 
 namespace NAGN.Model
 {
-
     public class Threshold : ImagePreprocessParent
     {
-        private double _min { get; set; }
-        private double _max { get; set; }
+        private double _min;
+        private double _max = 255;
 
         public double Min
         {
             get => _min;
             set
             {
-                _min = value;
+                _min = Math.Clamp(value, 0, 255);
                 OnPropertyChanged();
             }
         }
@@ -32,14 +31,15 @@ namespace NAGN.Model
             get => _max;
             set
             {
-                _max = value;
+                _max = Math.Clamp(value, 0, 255);
                 OnPropertyChanged();
             }
         }
         public override void UpdateImageAndSend()
         {
             if (string.IsNullOrEmpty(this.ImageOld)) return;
-            BitmapImage bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            BitmapImage? bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            if (bitmap == null) return;
             BitmapSource bitmapSource = NAGN_CV.nagnCV.Threshold(bitmap, Min, Max);
             ImageIntermediate = bitmapSource;
             Event.SendImage(bitmapSource);
@@ -47,7 +47,8 @@ namespace NAGN.Model
         public override void UpdateImageNotSend()
         {
             if (string.IsNullOrEmpty(this.ImageOld)) return;
-            BitmapImage bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            BitmapImage? bitmap = NAGN_CV.nagnCV.StringToBitmap(this.ImageOld);
+            if (bitmap == null) return;
             BitmapSource bitmapSource = NAGN_CV.nagnCV.Threshold(bitmap, Min, Max);
             ImageIntermediate = bitmapSource;
         }
@@ -57,8 +58,10 @@ namespace NAGN.Model
             {
                 return;
             }
-            this.ImageNew = NAGN_CV.nagnCV.BitmapToString(ImageIntermediate);
-            
+            if (ImageIntermediate != null)
+            {
+                this.ImageNew = NAGN_CV.nagnCV.BitmapToString(ImageIntermediate);
+            }
         }
     }
 }

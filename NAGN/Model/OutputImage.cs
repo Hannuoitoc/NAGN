@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,33 +10,41 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 
 namespace NAGN.Model
 {
-    public class OutputImage:INotifyPropertyChanged
+    public class OutputImage : INotifyPropertyChanged
     {
-        private string _name { get; set; }
-        public string Name
+        private string? _name;
+        public string? Name
         {
             get => _name;
-            set { _name = value;  OnPropertyChanged(); }
+            set { _name = value; OnPropertyChanged(); }
         }
-        private string _filePathImage { get; set; }
-        public string FilePathImage
+        private string? _filePathImage;
+        public string? FilePathImage
         {
             get => _filePathImage;
-            set { _filePathImage = value; OnPropertyChanged();}
+            set { _filePathImage = value; OnPropertyChanged(); }
         }
         public ObservableCollection<ImagePreprocessParent> ImagePreprocessingList { get; set; } = new ObservableCollection<ImagePreprocessParent>();
         public int IdFOV { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        [JsonIgnore]
         public ICommand AddImagePreprocessingCommand { get; }
+
+        [JsonIgnore]
         public ICommand SendImageOutputCommand { get; }
+
+        [JsonIgnore]
         public ICommand RemoveImagePreprocessingCommand { get; }
+
         public OutputImage()
         {
             AddImagePreprocessingCommand = new RelayCommand(AddImagePreprocessing);
@@ -44,96 +52,154 @@ namespace NAGN.Model
             RemoveImagePreprocessingCommand = new RelayCommand<ImagePreprocessParent>(RemoveImagePreprocessing);
         }
 
-        private void RemoveImagePreprocessing(ImagePreprocessParent imagePreprocessParent)
+        private void RemoveImagePreprocessing(ImagePreprocessParent? imagePreprocessParent)
         {
-            if(imagePreprocessParent!=null&&ImagePreprocessingList.Contains(imagePreprocessParent))
+            if (imagePreprocessParent != null && ImagePreprocessingList.Contains(imagePreprocessParent))
+            {
                 ImagePreprocessingList.Remove(imagePreprocessParent);
+            }
+            updateImagePreprocessingList();
+
+            if (ImagePreprocessingList.Count > 0)
+            {
+                var last = ImagePreprocessingList[ImagePreprocessingList.Count - 1];
+                if (!string.IsNullOrEmpty(last.ImageNew))
+                {
+                    var bmp = NAGN_CV.nagnCV.StringToBitmap(last.ImageNew);
+                    if (bmp != null) Event.SendImage(bmp);
+                    return;
+                }
+            }
+
+            string base64 = ImageToString(FilePathImage);
+            if (!string.IsNullOrEmpty(base64))
+            {
+                var bmp = NAGN_CV.nagnCV.StringToBitmap(base64);
+                if (bmp != null) Event.SendImage(bmp);
+            }
         }
 
-        private void SendImageOutput(OutputImage outputimage)
+        private void SendImageOutput(OutputImage? outputimage)
         {
-            BitmapSource imageSource=null;
-            if (outputimage.ImagePreprocessingList.Count >0)
-                imageSource = NAGN_CV.nagnCV.StringToBitmap(outputimage.ImagePreprocessingList[outputimage.ImagePreprocessingList.Count - 1].ImageNew);
-            else
-                imageSource = NAGN_CV.nagnCV.StringToBitmap(ImageToString(outputimage.FilePathImage));
-            Event.SendImage(imageSource);
+            if (outputimage == null) return;
+            BitmapSource? imageSource = null;
+            if (outputimage.ImagePreprocessingList.Count > 0)
+            {
+                var last = outputimage.ImagePreprocessingList[outputimage.ImagePreprocessingList.Count - 1];
+                if (!string.IsNullOrEmpty(last.ImageNew))
+                {
+                    imageSource = NAGN_CV.nagnCV.StringToBitmap(last.ImageNew);
+                }
+            }
+            if (imageSource == null && !string.IsNullOrEmpty(outputimage.FilePathImage))
+            {
+                string base64 = ImageToString(outputimage.FilePathImage);
+                if (!string.IsNullOrEmpty(base64))
+                {
+                    imageSource = NAGN_CV.nagnCV.StringToBitmap(base64);
+                }
+            }
+            if (imageSource != null)
+            {
+                Event.SendImage(imageSource);
+            }
         }
 
         public void AddImagePreprocessing()
         {
-            View.Image_preprocessing.InputImagePreprocessing inputImagePreprocessing = new View.Image_preprocessing.InputImagePreprocessing() { Owner = System.Windows.Application.Current.MainWindow };
+            View.Image_preprocessing.InputImagePreprocessing inputImagePreprocessing = new View.Image_preprocessing.InputImagePreprocessing() 
+            { 
+                Owner = System.Windows.Application.Current?.MainWindow 
+            };
             if (inputImagePreprocessing.ShowDialog() == true)
             {
-                string image;
+                string? image;
+                if (ImagePreprocessingList.Count != 0)
+                {
+                    image = ImagePreprocessingList[ImagePreprocessingList.Count - 1].ImageNew;
+                }
+                else
+                {
+                    image = ImageToString(FilePathImage);
+                }
+
+                if (string.IsNullOrEmpty(image))
+                {
+                    MessageBox.Show("Chưa có ảnh đầu vào hợp lệ hoặc không tìm thấy file ảnh!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 switch (inputImagePreprocessing.IdInputImagePreprocessing)
                 {
                     case 0:
-                        
-                        if(ImagePreprocessingList.Count != 0)
-                        {
-                            image = ImagePreprocessingList[ImagePreprocessingList.Count-1 ].ImageNew;
-                        }
-                        else
-                        {
-                            image = ImageToString(FilePathImage);
-                        }
                         Threshold threshold = new Threshold()
                         {
-                            Name = "Threshold",
+                            Name = "Threshold " + (ImagePreprocessingList.Count + 1),
                             ImageOld = image,
                             ImageNew = image,
+                            Min = 0,
+                            Max = 255
                         };
+                        threshold.UpdateImageNotSend();
+                        threshold.UpdateImage();
                         ImagePreprocessingList.Add(threshold);
+                        threshold.UpdateImageAndSend();
                         break;
+
                     case 1:
-                        if (ImagePreprocessingList.Count != 0)
-                        {
-                            image = ImagePreprocessingList[ImagePreprocessingList.Count - 1].ImageNew;
-                        }
-                        else
-                        {
-                            image = ImageToString(FilePathImage);
-                        }
                         Blur blur = new Blur()
                         {
-                            Name = "Blur",
+                            Name = "Blur " + (ImagePreprocessingList.Count + 1),
                             ImageOld = image,
                             ImageNew = image,
-                            Ksize = 1
+                            Ksize = 3 // Mặc định ksize = 3 an toàn với OpenCV
                         };
+                        blur.UpdateImageNotSend();
+                        blur.UpdateImage();
                         ImagePreprocessingList.Add(blur);
-                        break;
-                    case 2:
-                        break;
-                    case 3:
+                        blur.UpdateImageAndSend();
                         break;
                 }
             }
         }
-        public string ImageToString(string filePath)
+
+        public string ImageToString(string? filePath)
         {
-            if(filePath == null)
+            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
                 return string.Empty;
-            byte[] imageBytes = File.ReadAllBytes(filePath);
-            string base64String = Convert.ToBase64String(imageBytes);
-            return base64String;
+
+            try
+            {
+                byte[] imageBytes = File.ReadAllBytes(filePath);
+                return Convert.ToBase64String(imageBytes);
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
+
         public void updateImagePreprocessingList()
         {
-            if(ImagePreprocessingList.Count !=0)
-                ImagePreprocessingList[0].ImageOld = ImageToString(FilePathImage);
-            string image=null;
+            if (string.IsNullOrEmpty(FilePathImage) || !File.Exists(FilePathImage))
+                return;
+
+            string base64 = ImageToString(FilePathImage);
+            if (string.IsNullOrEmpty(base64)) return;
+
+            if (ImagePreprocessingList.Count != 0)
+            {
+                ImagePreprocessingList[0].ImageOld = base64;
+            }
+
+            string? currentImage = base64;
             foreach (var imagePreprocessing in ImagePreprocessingList)
             {
-                if (imagePreprocessing != ImagePreprocessingList[0])
-                {
-                    imagePreprocessing.ImageOld = image;
-                } 
+                imagePreprocessing.ImageOld = currentImage;
                 imagePreprocessing.UpdateImageNotSend();
                 imagePreprocessing.UpdateImage();
-                image = imagePreprocessing.ImageNew;
-            };
+                currentImage = imagePreprocessing.ImageNew;
+            }
         }
     }
 }

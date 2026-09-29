@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -14,12 +14,14 @@ namespace NAGN.Model
 {
     public abstract class ImagePreprocessParent : INotifyPropertyChanged
     {
-        private string _name { get; set; }
-        private string _imageOld { get; set; }
-        private string _imageNew { get; set; }
+        private string? _name;
+        private string? _imageOld;
+        private string? _imageNew;
+
         [JsonIgnore]
-        public BitmapSource ImageIntermediate { get; set; }
-        public string Name
+        public BitmapSource? ImageIntermediate { get; set; }
+
+        public string? Name
         {
             get => _name;
             set
@@ -28,7 +30,9 @@ namespace NAGN.Model
                 OnPropertyChanged();
             }
         }
-        public string ImageOld
+
+        [JsonIgnore]
+        public string? ImageOld
         {
             get => _imageOld;
             set
@@ -37,7 +41,9 @@ namespace NAGN.Model
                 OnPropertyChanged();
             }
         }
-        public string ImageNew
+
+        [JsonIgnore]
+        public string? ImageNew
         {
             get => _imageNew;
             set
@@ -46,25 +52,23 @@ namespace NAGN.Model
                 OnPropertyChanged();
             }
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        //public void SendImage()
-        //{
-        //    if (string.IsNullOrEmpty(this.ImageNew)) return;
-        //    BitmapImage bitmapImage = NAGN_CV.nagnCV.StringToBitmap(this.ImageNew);
-        //    Event.SendImage(bitmapImage);
-        //}
+
         public abstract void UpdateImageAndSend();
         public abstract void UpdateImageNotSend();
         public abstract void UpdateImage();
+
+        [JsonIgnore]
         public ICommand OutputImageCommand { get; }
+
         public ImagePreprocessParent()
         {
             OutputImageCommand = new RelayCommand(UpdateImage);
         }
-        
     }
 }
